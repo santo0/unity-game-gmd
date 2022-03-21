@@ -18,6 +18,9 @@ public class CollisionDetection : MonoBehaviour
     private Vector3[] RaysPos;
 
     private bool isGrounded;
+    private bool isLeftWall;
+    private bool isRightWall;
+
 
     private void Awake() {
         RaysPos = new Vector3[5]; //5 rays
@@ -33,7 +36,7 @@ public class CollisionDetection : MonoBehaviour
         Debug.DrawRay(RaysPos[LAT_RIG], Vector2.right * rayLength, Color.red);
     }
 
-    private void Update() {
+    private void FixedUpdate() {
 
         var yHalfExtents = col.bounds.extents.y;
         //get the center
@@ -52,13 +55,27 @@ public class CollisionDetection : MonoBehaviour
 
         isGrounded = checkIfGrounded();
 
+        isLeftWall = checkIfLeftWall();
+
+        isRightWall = checkIfRightWall();
+
+        Debug.Log("ground="+isGrounded+", left="+ isLeftWall+", right=%s"+isRightWall);
+
     }
 
 
     public bool isPlayerGrounded() {
-        Debug.Log(isGrounded);
         return isGrounded;
     }
+
+    public bool isPlayerWithLeftWall() {
+        return isLeftWall;
+    }
+
+    public bool isPlayerWithRightWall() {
+        return isRightWall;
+    }
+
 
     public bool checkIfGrounded() {
         RaycastHit2D[] GroundHitsCenter = Physics2D.RaycastAll(RaysPos[BOT_CEN], Vector2.down, rayLength);
@@ -68,15 +85,27 @@ public class CollisionDetection : MonoBehaviour
         RaycastHit2D[][] AllRaycastHits = {GroundHitsCenter, GroundHitsLeft, GroundHitsRight};
 
         foreach(RaycastHit2D[] HitList in AllRaycastHits) {
-            foreach(RaycastHit2D hit in HitList) {
-
-                if (hit.collider != null && hit.collider.tag == "Level"){
-                    return true;
-                }
-            }
+            if(checkRayCastHits(HitList)) return true;
         }
 
         return false;
+    }
+
+    public bool checkRayCastHits(RaycastHit2D[] HitList){
+        foreach(RaycastHit2D hit in HitList) {
+            if (hit.collider != null && hit.collider.tag == "Level") return true;
+        }
+        return false;
+    }
+
+    public bool checkIfLeftWall(){
+        RaycastHit2D[] LeftLateralHits = Physics2D.RaycastAll(RaysPos[LAT_LEF], Vector2.left, rayLength);
+        return checkRayCastHits(LeftLateralHits);
+    }
+
+    public bool checkIfRightWall(){
+        RaycastHit2D[] RightLateralHits = Physics2D.RaycastAll(RaysPos[LAT_RIG], Vector2.right, rayLength);
+        return checkRayCastHits(RightLateralHits);
     }
 
 }

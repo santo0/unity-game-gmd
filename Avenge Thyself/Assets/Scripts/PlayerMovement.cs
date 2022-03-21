@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     private void FixedUpdate() {
+        Vector2 newVelocity = Vector2.zero;
         if(dir.x < 0) {
             Debug.Log("Left");
             spriteRenderer.flipX = true;
@@ -56,20 +57,23 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Right");
             spriteRenderer.flipX = false;
         }
-        float xDir = dir.x * movSpeed * Time.deltaTime;
-        float yDir = body.velocity.y;
+        //float xDir = dir.x * movSpeed * Time.deltaTime;
+        //float yDir = body.velocity.y;
+        newVelocity = dir * movSpeed * Time.deltaTime + Vector2.up * body.velocity.y;
         if (jumpPressed && colDetect.isPlayerGrounded()) {
             Debug.Log("Up");
-            yDir += jumpSpeed;
+            newVelocity = newVelocity + Vector2.up * jumpSpeed;
+//            yDir += jumpSpeed;
             jumpTimeCounter = jumpTime;
             canJump = true;
         }
 
-        body.velocity = new Vector2(xDir, yDir);
+//        body.velocity = new Vector2(xDir, yDir);
 
         if(jumpPressed && canJump){
             if (jumpTimeCounter > 0){
-                body.velocity = body.velocity + Vector2.up * jumpSpeed * (jumpTimeCounter/jumpTime);
+                newVelocity = newVelocity + Vector2.up*jumpSpeed*(jumpTimeCounter/jumpTime);
+//                body.velocity = body.velocity + Vector2.up * jumpSpeed * (jumpTimeCounter/jumpTime);
                 jumpTimeCounter -= Time.deltaTime;
             } else {
                 jumpPressed = false;
@@ -81,8 +85,22 @@ public class PlayerMovement : MonoBehaviour
         }else{
             animator.SetBool("isGrounded", false);
         }
+        if(colDetect.isPlayerWithRightWall() || colDetect.isPlayerWithLeftWall()){
+            animator.SetBool("touchWall", true);
+            newVelocity = newVelocity + Vector2.up * 0.2f; //ficar 0.2 en variable, friction o algo
+//            body.velocity = body.velocity - Vector2.down * 0.2f; //
+        }else{
+            animator.SetBool("touchWall", false);
+        }
+
+        //could jump while sliding a wall
+
+        //body.velocity = new Vector2(xDir, yDir);
+        body.velocity = newVelocity;
         animator.SetFloat("speedX", Mathf.Abs(body.velocity.x));
         animator.SetFloat("speedY", body.velocity.y);
-        dir = new Vector2(dir.x, 0f);
+
+        dir = dir * Vector2.right;
+//        dir = new Vector2(dir.x, 0f);
     }
 }
