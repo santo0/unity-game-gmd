@@ -157,6 +157,17 @@
                 },
                 {
                     "name": "",
+                    "id": "5d0bd5bd-cf22-4578-9902-7c8f2fadbf6a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7a7590f3-d0f0-44aa-b8a6-d1d9c67168c6",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
