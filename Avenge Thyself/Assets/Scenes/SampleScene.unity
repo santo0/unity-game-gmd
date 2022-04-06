@@ -472,6 +472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e8848ce8a6f59149a1155dfe378edc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  col: {fileID: 627004407}
   spriteRenderer: {fileID: 627004408}
   animator: {fileID: 627004413}
   hs: {fileID: 627004414}
@@ -12702,7 +12703,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 31
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -12748,4 +12749,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   hp: 0
-  animator: {fileID: 0}
+  animator: {fileID: 2143900875}

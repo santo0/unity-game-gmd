@@ -7,5 +7,7 @@ public class EnemyHealthSystem : HealthSystem
     override public void CharacterDeath()
     {
         animator.SetTrigger("Death");
+        Debug.Log("I'm dead");
+        Destroy(gameObject);
     }
 }

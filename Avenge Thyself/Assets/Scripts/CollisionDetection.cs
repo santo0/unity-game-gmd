@@ -23,6 +23,9 @@ public class CollisionDetection : MonoBehaviour
     private Vector3[] RaysPos;
 
     private bool isGrounded;
+    private bool isOnLedge;
+
+    private bool isAtWall;
 
     private bool isTopRight;
     private bool isTopLeft;
@@ -77,10 +80,15 @@ public class CollisionDetection : MonoBehaviour
         isTopRight = checkRayCastHits(RaysPos[LAT_TOP_RIG], Vector2.right);
         isBotRight = checkRayCastHits(RaysPos[LAT_BOT_RIG], Vector2.right);
 
+        isOnLedge = checkIfOnLedge();
+
+        isAtWall = checkIfWall();
 
 
-        //Debug.Log("ground=" + isGrounded + ", isTopLeft=" + isTopLeft + ", isTopRight=" +
-        //isTopRight + ", isBotLeft=" + isBotLeft + ", isBotRight=" + isBotRight);
+
+        Debug.Log("ground=" + isGrounded + ", isTopLeft=" + isTopLeft + ", isTopRight=" +
+        isTopRight + ", isBotLeft=" + isBotLeft + ", isBotRight=" + isBotRight +
+        ", isOnLedge=" + isOnLedge + ", isAtWall=" + isAtWall);
 
     }
 
@@ -88,6 +96,16 @@ public class CollisionDetection : MonoBehaviour
     public bool isPlayerGrounded()
     {
         return isGrounded;
+    }
+
+    public bool isPlayerOnLedge()
+    {
+        return isOnLedge;
+    }
+
+    public bool isPlayerAtWall()
+    {
+        return isAtWall;
     }
 
     public bool isCollTopRight()
@@ -110,14 +128,14 @@ public class CollisionDetection : MonoBehaviour
     }
 
 
-    public bool checkIfGrounded()
+    private bool checkIfGrounded()
     {
         return checkRayCastHits(RaysPos[BOT_CEN], Vector2.down) ||
                checkRayCastHits(RaysPos[BOT_LEF], Vector2.down) ||
                checkRayCastHits(RaysPos[BOT_RIG], Vector2.down);
     }
 
-    public bool checkRayCastHits(Vector3 origin, Vector2 dir)
+    private bool checkRayCastHits(Vector3 origin, Vector2 dir)
     {
         RaycastHit2D[] HitList = Physics2D.RaycastAll(origin, dir, rayLength);
         foreach (RaycastHit2D hit in HitList)
@@ -127,12 +145,12 @@ public class CollisionDetection : MonoBehaviour
         return false;
     }
 
-    public bool checkIfLedge()
+    private bool checkIfOnLedge()
     {
         return (!isTopRight && isBotRight) || (!isTopLeft && isBotLeft);
     }
 
-    public bool checkIfWall()
+    private bool checkIfWall()
     {
         return (isTopRight && isBotRight) || (isTopLeft && isBotLeft);
     }

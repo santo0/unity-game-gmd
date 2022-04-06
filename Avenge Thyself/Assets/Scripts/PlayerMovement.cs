@@ -24,7 +24,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private Vector2 forces;
 
-
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -33,19 +32,15 @@ public class PlayerMovement : MonoBehaviour
         canJump = true;
     }
 
-
     private void OnMove(InputValue value)
     {
-        Debug.Log(value.Get<Vector2>());
         dir = value.Get<Vector2>();
         if (dir.x < 0)
         {
-            Debug.Log("Left");
             spriteRenderer.flipX = true;
         }
         else if (dir.x > 0)
         {
-            Debug.Log("Right");
             spriteRenderer.flipX = false;
         }
     }
@@ -62,16 +57,60 @@ public class PlayerMovement : MonoBehaviour
             jumpPressed = false;
             canJump = false;
         }
-        Debug.Log(jumpPressed + " --- " + val);
     }
 
 
     private void wallInteraction()
     {
-        //touching right or left wall
-        if (colDetect.checkIfWall())
-        {
 
+        if (colDetect.isCollBotLeft())
+        {
+            spriteRenderer.flipX = true;
+        }
+        else if (colDetect.isCollBotRight())
+        {
+            spriteRenderer.flipX = false;
+        }
+
+        //player input jump and not grounded
+        if (jumpPressed && !colDetect.isPlayerGrounded())
+        {
+            horizontalWallJump();
+        }
+        else if (dir.x != 0)
+        {
+            horizontalWallJump();
+        }
+        else
+        {
+            //Wall slide with friction
+            if (body.velocity.y < 0f)
+            {
+                Vector2 wallForce = (-body.velocity) * body.mass * body.gravityScale * Vector2.up;
+                body.AddForce(wallForce);
+            }
+        }
+
+
+    }
+
+    private void ledgeInteraction()
+    {
+        //touching right or left wall
+        if (jumpPressed)
+        {
+            verticalWallJump();
+        }
+        else if (dir.x != 0f)
+        {
+            horizontalWallJump();
+        }
+        else
+        {
+            animator.SetBool("isOnLedge", true);
+            body.velocity = Vector2.zero;
+            body.angularVelocity = 0f;
+            body.isKinematic = true;
             if (colDetect.isCollBotLeft())
             {
                 spriteRenderer.flipX = true;
@@ -80,85 +119,37 @@ public class PlayerMovement : MonoBehaviour
             {
                 spriteRenderer.flipX = false;
             }
-
-
-            animator.SetBool("touchWall", true);
-
-
-            //player input jump and not grounded
-            if (jumpPressed && !colDetect.isPlayerGrounded())
-            {
-                horizontalWallJump();
-            }
-            else
-            {
-                //Wall slide with friction
-                if (body.velocity.y < 0f)
-                {
-                    Vector2 wallForce = (-body.velocity) * body.mass * body.gravityScale * Vector2.up;
-                    Debug.Log("wallForce = " + wallForce);
-                    body.AddForce(wallForce);
-                    //newVelocity = newVelocity + Vector2.up * 0.2f; //ficar 0.2 en variable, friction o algo
-                }
-            }
-
         }
-        else
-        {
-            //Is not touching a wall
-            animator.SetBool("touchWall", false);
-        }
+
     }
 
-    private void ledgeInteraction()
+    private void groundInteraction()
     {
-        //touching right or left wall
-        if (colDetect.checkIfLedge())
+        if (body.velocity.x > -10 && body.velocity.x < 10f)
         {
-            if (jumpPressed)
-            {
-                body.isKinematic = false;
-                verticalWallJump();
-            }
-            else if(dir.x != 0f) {
-                body.isKinematic = false;
-                horizontalWallJump();
-            }
-            else
-            {
-                animator.SetBool("isOnLedge", true);
-                body.velocity = Vector2.zero;
-                body.angularVelocity = 0f;
-                body.isKinematic = true;
-                if (colDetect.isCollBotLeft())
-                {
-                    spriteRenderer.flipX = true;
-                }
-                else if (colDetect.isCollBotRight())
-                {
-                    spriteRenderer.flipX = false;
-                }
-            }
+            body.AddForce(dir * movSpeed * Time.deltaTime);
         }
-        else
+        if (jumpPressed)
         {
-            //Is not touching a wall
-            animator.SetBool("isOnLedge", false);
-            body.isKinematic = false;
+            body.AddForce(Vector2.up * jumpSpeed);
+            jumpTimeCounter = jumpTime;
         }
     }
-
     private void horizontalWallJump()
     {
         //resets Y-axis velocity (problems with the momentum)
         body.velocity = body.velocity + Vector2.down * body.velocity;
-        if (colDetect.isCollBotRight())
+
+        Vector2 jForce = new Vector2(300f, 700f);
+        if (colDetect.isCollBotRight() && dir.x < 0)
         {
-            body.AddForce(new Vector2(-300f, 700f));
+            body.isKinematic = false;
+            body.AddForce(jForce * new Vector2(-1, 1));
         }
-        else
+        else if (colDetect.isCollBotLeft() && dir.x > 0)
         {
-            body.AddForce(new Vector2(300f, 700f));
+            body.isKinematic = false;
+            body.AddForce(jForce);
         }
     }
 
@@ -166,63 +157,56 @@ public class PlayerMovement : MonoBehaviour
     {
         //resets Y-axis velocity (problems with the momentum)
         body.velocity = body.velocity + Vector2.down * body.velocity;
-        body.AddForce(new Vector2(0f, 1000f));        
+        Vector2 jForce = new Vector2(0f, 1000f);
+        body.isKinematic = false;
+        body.AddForce(jForce);
     }
 
-    private void FixedUpdate()
+    private void airInteraction()
     {
-        Vector2 newVelocity = Vector2.zero;
-        //newVelocity = dir * movSpeed * Time.deltaTime + Vector2.up * body.velocity.y;
-        //player input lateral movement
+        // solves bug with ledge
+        body.isKinematic = false;
+
         if (body.velocity.x > -10 && body.velocity.x < 10f)
         {
             body.AddForce(dir * movSpeed * Time.deltaTime);
         }
-
-        //player input jump pressed
         if (jumpPressed)
         {
-            //player touching ground -> always can jump
-            if (colDetect.isPlayerGrounded())
+            //while counter active
+            if (jumpTimeCounter > 0)
             {
-                Debug.Log("Up");
-                //newVelocity = newVelocity + Vector2.up * jumpSpeed;
-                body.AddForce(Vector2.up * jumpSpeed);
-                jumpTimeCounter = jumpTime;
-                canJump = true;
-                //player not touching ground and can jump
+                body.AddForce(Vector2.up * jumpSpeed * (jumpTimeCounter / jumpTime));
+                jumpTimeCounter -= Time.deltaTime;
             }
-            else if (canJump)
+            else
             {
-                //while counter active
-                if (jumpTimeCounter > 0)
-                {
-                    //                newVelocity = newVelocity + Vector2.up*jumpSpeed*(jumpTimeCounter/jumpTime);
-                    body.AddForce(Vector2.up * jumpSpeed * (jumpTimeCounter / jumpTime));
-                    jumpTimeCounter -= Time.deltaTime;
-                }
-                else
-                {
-                    jumpPressed = false;
-                }
+                jumpPressed = false;
             }
         }
-
-        //touching ground animator
+    }
+    private void FixedUpdate()
+    {
         if (colDetect.isPlayerGrounded())
         {
-            animator.SetBool("isGrounded", true);
+            groundInteraction();
+        }
+        else if (colDetect.isPlayerOnLedge())
+        {
+            ledgeInteraction();
+        }
+        else if (colDetect.isPlayerAtWall())
+        {
+            wallInteraction();
         }
         else
         {
-            animator.SetBool("isGrounded", false);
+            airInteraction();
         }
 
-        wallInteraction();
-
-        ledgeInteraction();
-
-        //body.velocity = newVelocity;
+        animator.SetBool("isGrounded", colDetect.isPlayerGrounded());
+        animator.SetBool("isOnLedge", colDetect.isPlayerOnLedge());
+        animator.SetBool("touchWall", colDetect.isPlayerAtWall());
         animator.SetFloat("speedX", Mathf.Abs(body.velocity.x));
         animator.SetFloat("speedY", body.velocity.y);
 
