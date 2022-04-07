@@ -5,12 +5,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerCombat : MonoBehaviour
 {
+
     public BoxCollider2D col;
 
-    public SpriteRenderer spriteRenderer;
+    SpriteRenderer spriteRenderer;
 
-    public Animator animator;
-    public HealthSystem hs;
+    Animator animator;
+    HealthSystem hs;
+    DamagePopupSpawner damagePopupSpawner;
+
     enum AttackType
     {
         NoAttack,
@@ -18,12 +21,17 @@ public class PlayerCombat : MonoBehaviour
         Attack2,
         Attack3
     }
-    private AttackType lastAtt;
-    private float timeLastAtt;
+    AttackType lastAtt;
+    float timeLastAtt;
 
     void Awake()
     {
         lastAtt = AttackType.NoAttack;
+        //col = gameObject.GetComponent<BoxCollider2D>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        animator = gameObject.GetComponent<Animator>();
+        hs = gameObject.GetComponent<HealthSystem>();
+        damagePopupSpawner = gameObject.GetComponent<DamagePopupSpawner>();
     }
 
     void OnBasicAttack()
@@ -57,13 +65,20 @@ public class PlayerCombat : MonoBehaviour
         foreach (Collider2D enemy in hitEnemies)
         {
             Debug.Log("Something hitted: " + enemy);
-            if(enemy.gameObject.layer == LayerMask.NameToLayer("Enemy")) {
-                HealthSystem enemyHealthSystem = enemy.GetComponent<HealthSystem>();
-                enemyHealthSystem.TakeDamage(10f);
-                enemy.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir * 500f, 500f));
-                Debug.Log("ENEMY!!!! 10 damage fuu");
+            if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                HitEnemy(enemy, xDir);
             }
         }
+    }
+
+    void HitEnemy(Collider2D enemy, float xDir)
+    {
+        float dmg = 10;
+        HealthSystem enemyHealthSystem = enemy.GetComponent<HealthSystem>();
+        enemyHealthSystem.TakeDamage(dmg);
+        enemy.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir * 500f, 500f));
+        damagePopupSpawner.SpawnDamagePopup(enemy.gameObject, dmg);
     }
 
     void Update()

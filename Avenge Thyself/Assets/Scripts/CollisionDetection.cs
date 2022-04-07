@@ -85,13 +85,16 @@ public class CollisionDetection : MonoBehaviour
         isAtWall = checkIfWall();
 
 
+        //printCollisionState();
 
-        Debug.Log("ground=" + isGrounded + ", isTopLeft=" + isTopLeft + ", isTopRight=" +
-        isTopRight + ", isBotLeft=" + isBotLeft + ", isBotRight=" + isBotRight +
-        ", isOnLedge=" + isOnLedge + ", isAtWall=" + isAtWall);
 
     }
 
+    void printCollisionState() {
+        Debug.Log("ground=" + isGrounded + ", isTopLeft=" + isTopLeft + ", isTopRight=" +
+        isTopRight + ", isBotLeft=" + isBotLeft + ", isBotRight=" + isBotRight +
+        ", isOnLedge=" + isOnLedge + ", isAtWall=" + isAtWall);
+    }
 
     public bool isPlayerGrounded()
     {

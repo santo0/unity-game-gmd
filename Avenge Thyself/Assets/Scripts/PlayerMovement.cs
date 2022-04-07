@@ -19,8 +19,6 @@ public class PlayerMovement : MonoBehaviour
     private float jumpTimeCounter;
     public float jumpTime = 0.2f;
 
-    private bool canJump;
-
     [SerializeField]
     private Vector2 forces;
 
@@ -29,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
-        canJump = true;
     }
 
     private void OnMove(InputValue value)
@@ -55,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             jumpPressed = false;
-            canJump = false;
         }
     }
 
@@ -125,12 +121,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void groundInteraction()
     {
+
         if (body.velocity.x > -10 && body.velocity.x < 10f)
         {
+            body.isKinematic = false;
             body.AddForce(dir * movSpeed * Time.deltaTime);
         }
         if (jumpPressed)
         {
+            body.isKinematic = false;
             body.AddForce(Vector2.up * jumpSpeed);
             jumpTimeCounter = jumpTime;
         }
