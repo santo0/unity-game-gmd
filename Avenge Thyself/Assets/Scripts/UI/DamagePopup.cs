@@ -19,7 +19,7 @@ public class DamagePopup : MonoBehaviour, IPooledObject
     public void setDamage(float dmg)
     {
         textMesh.SetText(dmg + "!");
-        Debug.Log("setDamage:" + outTime);
+        //Debug.Log("setDamage:" + outTime);
     }
 
 
@@ -27,13 +27,13 @@ public class DamagePopup : MonoBehaviour, IPooledObject
     {
         textMesh.SetText("");
         outTime = lifeTime;
-        Debug.Log("OnObjectSpawn:" + outTime);
+        //Debug.Log("OnObjectSpawn:" + outTime);
     }
 
 
     private void FixedUpdate()
     {
-            Debug.Log("FixedUpdate:" + outTime);
+        //Debug.Log("FixedUpdate:" + outTime);
         if (outTime <= 0)
         {
             gameObject.SetActive(false);

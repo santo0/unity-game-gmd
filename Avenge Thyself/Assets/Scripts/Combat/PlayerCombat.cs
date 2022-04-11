@@ -9,7 +9,6 @@ public class PlayerCombat : MonoBehaviour
     public BoxCollider2D col;
 
     SpriteRenderer spriteRenderer;
-
     Animator animator;
     HealthSystem hs;
     DamagePopupSpawner damagePopupSpawner;
