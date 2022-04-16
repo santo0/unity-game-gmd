@@ -71,6 +71,19 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    void OnBlock(InputValue value) 
+    {
+                float val = value.Get<float>();
+        if (val == 1f)
+        {
+            animator.SetBool("isBlocking", true);
+        }
+        else
+        {
+            animator.SetBool("isBlocking", false);
+        }
+    }
+
     void HitEnemy(Collider2D enemy, float xDir)
     {
         float dmg = 10;

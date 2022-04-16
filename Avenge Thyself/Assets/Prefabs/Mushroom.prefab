@@ -106,9 +106,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noiseReceiver: {fileID: 3089868057507078033}
+  animator: {fileID: 3676053145199112728}
   attackRange: 4
   IdleState: {fileID: 5143744453142554538}
   ChaseState: {fileID: 3482674341415042738}
+  punch: {fileID: 3746313329755919554}
+  bite: {fileID: 7260185405718068707}
 --- !u!1 &3494460404702811017
 GameObject:
   m_ObjectHideFlags: 0

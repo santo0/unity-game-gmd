@@ -32,6 +32,17 @@ public class CollisionDetection : MonoBehaviour
     private bool isBotRight;
     private bool isBotLeft;
 
+    delegate bool IsValidCollider(Collider2D col);
+    IsValidCollider IsLevel = delegate (Collider2D col)
+    { return col.gameObject.layer == LayerMask.NameToLayer("Level"); };
+    IsValidCollider IsPlatform = delegate (Collider2D col)
+    { return col.gameObject.layer == LayerMask.NameToLayer("Platform"); };
+    IsValidCollider IsWalkable = delegate (Collider2D col)
+    {
+        return col.gameObject.layer == LayerMask.NameToLayer("Level") ||
+               col.gameObject.layer == LayerMask.NameToLayer("Platform");
+    };
+
 
     private void Awake()
     {
@@ -75,10 +86,10 @@ public class CollisionDetection : MonoBehaviour
 
         isGrounded = checkIfGrounded();
 
-        isTopLeft = checkRayCastHits(RaysPos[LAT_TOP_LEF], Vector2.left);
-        isBotLeft = checkRayCastHits(RaysPos[LAT_BOT_LEF], Vector2.left);
-        isTopRight = checkRayCastHits(RaysPos[LAT_TOP_RIG], Vector2.right);
-        isBotRight = checkRayCastHits(RaysPos[LAT_BOT_RIG], Vector2.right);
+        isTopLeft = checkRayCastHits(RaysPos[LAT_TOP_LEF], Vector2.left, IsWalkable);
+        isBotLeft = checkRayCastHits(RaysPos[LAT_BOT_LEF], Vector2.left, IsWalkable);
+        isTopRight = checkRayCastHits(RaysPos[LAT_TOP_RIG], Vector2.right, IsWalkable);
+        isBotRight = checkRayCastHits(RaysPos[LAT_BOT_RIG], Vector2.right, IsWalkable);
 
         isOnLedge = checkIfOnLedge();
 
@@ -90,7 +101,8 @@ public class CollisionDetection : MonoBehaviour
 
     }
 
-    void printCollisionState() {
+    void printCollisionState()
+    {
         Debug.Log("ground=" + isGrounded + ", isTopLeft=" + isTopLeft + ", isTopRight=" +
         isTopRight + ", isBotLeft=" + isBotLeft + ", isBotRight=" + isBotRight +
         ", isOnLedge=" + isOnLedge + ", isAtWall=" + isAtWall);
@@ -130,27 +142,27 @@ public class CollisionDetection : MonoBehaviour
         return isBotLeft;
     }
 
-
     private bool checkIfGrounded()
     {
-        return checkRayCastHits(RaysPos[BOT_CEN], Vector2.down) ||
-               checkRayCastHits(RaysPos[BOT_LEF], Vector2.down) ||
-               checkRayCastHits(RaysPos[BOT_RIG], Vector2.down);
+        return checkRayCastHits(RaysPos[BOT_CEN], Vector2.down, IsWalkable) ||
+               checkRayCastHits(RaysPos[BOT_LEF], Vector2.down, IsWalkable) ||
+               checkRayCastHits(RaysPos[BOT_RIG], Vector2.down, IsWalkable);
     }
 
-    private bool checkRayCastHits(Vector3 origin, Vector2 dir)
+    //hit.collider.tag == "Level"
+    private bool checkRayCastHits(Vector3 origin, Vector2 dir, IsValidCollider validate)
     {
         RaycastHit2D[] HitList = Physics2D.RaycastAll(origin, dir, rayLength);
         foreach (RaycastHit2D hit in HitList)
         {
-            if (hit.collider != null && hit.collider.tag == "Level") return true;
+            if (hit.collider != null && validate(hit.collider)) return true;
         }
         return false;
     }
 
     private bool checkIfOnLedge()
     {
-        return (!isTopRight && isBotRight) || (!isTopLeft && isBotLeft);
+        return (!isTopRight && isBotRight && !isBotLeft && !isTopLeft) || (!isTopLeft && isBotLeft && !isBotRight && !isTopRight);
     }
 
     private bool checkIfWall()

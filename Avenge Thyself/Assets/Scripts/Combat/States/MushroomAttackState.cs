@@ -5,15 +5,30 @@ using UnityEngine;
 public class MushroomAttackState : MonoBehaviour, State
 {
     public NoiseReceiver noiseReceiver;
+    public Animator animator;
 
     public float attackRange = 4;
 
     public MushroomIdleState IdleState;
     public MushroomChaseState ChaseState;
 
-    IEnumerator StartAttack(){
+    public CircleCollider2D punch;
+    public CircleCollider2D bite;
+
+    private bool canAttack;
+
+    private void Start() {
+        canAttack = true;
+    }
+
+    IEnumerator StartAttack()
+    {
+        canAttack = false;
         Debug.Log("ATTACK!");
+        animator.SetTrigger("attack1");
+
         yield return new WaitForSeconds(1f);
+        canAttack = true;
     }
     public State RunState()
     {
@@ -22,7 +37,7 @@ public class MushroomAttackState : MonoBehaviour, State
         {
             Vector2 dist = target.position - transform.position;
             var atRange = dist.magnitude <= attackRange;
-            if (atRange)
+            if (atRange && canAttack)
             {
                 //attack
                 StartCoroutine(StartAttack());

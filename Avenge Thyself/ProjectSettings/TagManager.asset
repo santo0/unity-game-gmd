@@ -16,9 +16,9 @@ TagManager:
   - Enemy
   - Noise
   - AttackHitbox
-  - 
-  - 
-  - 
+  - Platform
+  - Level
+  - CheckPoint
   - 
   - 
   - 

@@ -30,7 +30,7 @@ public class NoiseMaker : MonoBehaviour
         {
             Debug.Log("Ha SORTIT un enemic!");
             other.gameObject
-                 .GetComponent<EnemyMovement>()
+                 .GetComponent<NoiseReceiver>()
                  .StopTarget();
             //other.StopTargeting
         }

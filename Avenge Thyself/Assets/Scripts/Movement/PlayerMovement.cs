@@ -6,9 +6,15 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
 
+    public float MAX_VEL = 10f;
+    public Vector2 HZ_JUMP;
+    public Vector2 VT_JUMP;
+
     public CollisionDetection colDetect;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D body;
+
+    private PlayerOneWayPlatformController oneWayPlatformController;
 
     public Animator animator;
     private Vector2 dir;
@@ -27,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        oneWayPlatformController = GetComponent<PlayerOneWayPlatformController>();
     }
 
     private void OnMove(InputValue value)
@@ -122,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
     private void groundInteraction()
     {
 
-        if (body.velocity.x > -10 && body.velocity.x < 10f)
+        if (body.velocity.x > -MAX_VEL && body.velocity.x < MAX_VEL)
         {
             body.isKinematic = false;
             body.AddForce(dir * movSpeed * Time.deltaTime);
@@ -139,16 +146,19 @@ public class PlayerMovement : MonoBehaviour
         //resets Y-axis velocity (problems with the momentum)
         body.velocity = body.velocity + Vector2.down * body.velocity;
 
-        Vector2 jForce = new Vector2(300f, 700f);
+        //Vector2 jForce = new Vector2(300f, 700f);
+        Vector2 jForce = HZ_JUMP;
         if (colDetect.isCollBotRight() && dir.x < 0)
         {
             body.isKinematic = false;
             body.AddForce(jForce * new Vector2(-1, 1));
+            spriteRenderer.flipX = true;
         }
         else if (colDetect.isCollBotLeft() && dir.x > 0)
         {
             body.isKinematic = false;
             body.AddForce(jForce);
+            spriteRenderer.flipX = false;
         }
     }
 
@@ -156,7 +166,8 @@ public class PlayerMovement : MonoBehaviour
     {
         //resets Y-axis velocity (problems with the momentum)
         body.velocity = body.velocity + Vector2.down * body.velocity;
-        Vector2 jForce = new Vector2(0f, 1000f);
+        //Vector2 jForce = new Vector2(0f, 1000f);
+        Vector2 jForce = VT_JUMP;
         body.isKinematic = false;
         body.AddForce(jForce);
     }
@@ -166,7 +177,7 @@ public class PlayerMovement : MonoBehaviour
         // solves bug with ledge
         body.isKinematic = false;
 
-        if (body.velocity.x > -10 && body.velocity.x < 10f)
+        if (body.velocity.x > -MAX_VEL && body.velocity.x < MAX_VEL)
         {
             body.AddForce(dir * movSpeed * Time.deltaTime);
         }
@@ -184,6 +195,15 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    private void OnDown()
+    {
+        if (oneWayPlatformController.currentOneWayPlatform != null)
+        {
+            StartCoroutine(oneWayPlatformController.DisableCollision());
+        }
+    }
+
     private void FixedUpdate()
     {
         if (colDetect.isPlayerGrounded())
