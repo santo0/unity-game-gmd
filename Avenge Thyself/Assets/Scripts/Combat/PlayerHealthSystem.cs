@@ -5,8 +5,22 @@ using UnityEngine;
 public class PlayerHealthSystem : HealthSystem
 {
 
+    public SpawnPoint spawnPoint;
+
     override public void CharacterDeath()
     {
-        animator.SetTrigger("Death");
+        animator.SetBool("Dead", true);
+    }
+
+    public override void CharacterRestart()
+    {
+        animator.SetBool("Dead", false);
+        spawnPoint.SpawnPlayer(this.gameObject);
+
+    }
+
+    public void Revive()
+    {
+        hp = MAX_HP;
     }
 }

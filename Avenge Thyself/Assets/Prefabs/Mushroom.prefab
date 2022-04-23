@@ -108,10 +108,12 @@ MonoBehaviour:
   noiseReceiver: {fileID: 3089868057507078033}
   animator: {fileID: 3676053145199112728}
   attackRange: 4
+  damage: 10
   IdleState: {fileID: 5143744453142554538}
   ChaseState: {fileID: 3482674341415042738}
   punch: {fileID: 3746313329755919554}
   bite: {fileID: 7260185405718068707}
+  body: {fileID: 4895463398080490247}
 --- !u!1 &3494460404702811017
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +229,7 @@ MonoBehaviour:
   IdleState: {fileID: 5143744453142554538}
   AttackState: {fileID: 6063583940891924965}
   noiseReceiver: {fileID: 3089868057507078033}
+  enemyHealthSystem: {fileID: 4895463398080490244}
 --- !u!1 &4406457281352421000
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,8 +434,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f56ab660a4f284f8c5c5a11a0ab53d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
+  MAX_HP: 100
   hp: 0
+  PUSH_TIME: 0.5
+  DEAD_TIME: 2
 --- !u!114 &553239081598786745
 MonoBehaviour:
   m_ObjectHideFlags: 0

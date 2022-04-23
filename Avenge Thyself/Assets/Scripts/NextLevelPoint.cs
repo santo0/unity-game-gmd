@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class NextLevelPoint : MonoBehaviour
 {
-    public LevelLoader levelLoader;
-
+    public string nextLevelName;
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -13,7 +12,7 @@ public class NextLevelPoint : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             Debug.Log("It's a player");
-            levelLoader.LoadNextLevel();
+            GameManager.instance.LoadLevel(nextLevelName);
         }
     }
 }

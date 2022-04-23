@@ -12,6 +12,7 @@ public class PlayerCombat : MonoBehaviour
     Animator animator;
     HealthSystem hs;
     DamagePopupSpawner damagePopupSpawner;
+    bool isBlocking;
 
     enum AttackType
     {
@@ -31,6 +32,7 @@ public class PlayerCombat : MonoBehaviour
         animator = gameObject.GetComponent<Animator>();
         hs = gameObject.GetComponent<HealthSystem>();
         damagePopupSpawner = gameObject.GetComponent<DamagePopupSpawner>();
+        isBlocking = false;
     }
 
     void OnBasicAttack()
@@ -71,17 +73,16 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    void OnBlock(InputValue value) 
+    void OnBlock(InputValue value)
     {
-                float val = value.Get<float>();
-        if (val == 1f)
-        {
-            animator.SetBool("isBlocking", true);
-        }
-        else
-        {
-            animator.SetBool("isBlocking", false);
-        }
+        bool block = (value.Get<float>() == 1f);
+        animator.SetBool("isBlocking", block);
+        isBlocking = block;
+    }
+
+    public bool IsBlocking()
+    {
+        return isBlocking;
     }
 
     void HitEnemy(Collider2D enemy, float xDir)
