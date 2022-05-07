@@ -18,7 +18,7 @@ public class HarmfulBody : MonoBehaviour
             {
                 Debug.Log("Hostion");
                 PlayerHealthSystem playerHS = other.gameObject.GetComponent<PlayerHealthSystem>();
-                playerHS.TakeDamage(damage);
+                playerHS.TakeHit(damage, 1); //TODO: Canviar aixo!
             }
         }
     }

@@ -6,16 +6,25 @@ public class EnemyAI : MonoBehaviour
 {
     public State currentState;
 
-    private void Awake() {
-        currentState = GetComponentInChildren<MushroomIdleState>();
+    public StateLoader stateLoader;
+
+    public EnemyHealthSys healthSys;
+
+
+    private void Awake()
+    {
+        currentState = stateLoader.LoadInitialState();
     }
 
     void FixedUpdate()
     {
-        State nextState = currentState.RunState();
-        if (nextState != null)
+        if (healthSys.GetHP() > 0)
         {
-            currentState = nextState;
+            State nextState = currentState.RunState();
+            if (nextState != null)
+            {
+                currentState = nextState;
+            }
         }
     }
 }

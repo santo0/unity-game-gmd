@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         oneWayPlatformController = GetComponent<PlayerOneWayPlatformController>();
     }
-
     private void OnMove(InputValue value)
     {
         dir = value.Get<Vector2>();

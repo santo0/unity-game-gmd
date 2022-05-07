@@ -43,13 +43,31 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            if(currentSong != null){
+            if (currentSong != null)
+            {
                 currentSong.source.Stop();
             }
             s.source.loop = loop;
             s.source.Play();
             currentSong = s;
+            Debug.Log("Playing song " + name);
+
         }
     }
 
+    public void Stop()
+    {
+        currentSong.source.Stop();
+        currentSong = null;
+    }
+
+    public void Pause()
+    {
+        currentSong.source.Pause();
+    }
+
+    public void Resume()
+    {
+        currentSong.source.Play();
+    }
 }

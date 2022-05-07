@@ -18,7 +18,7 @@ public class MushroomChaseState : MonoBehaviour, State
     public MushroomIdleState IdleState;
     public MushroomAttackState AttackState;
     public NoiseReceiver noiseReceiver;
-    public EnemyHealthSystem enemyHealthSystem;
+    public EnemyHealthSys enemyHealthSystem;
 
     private void HorizontalMove(float dx)
     {
@@ -29,7 +29,7 @@ public class MushroomChaseState : MonoBehaviour, State
     {
         Transform target = noiseReceiver.GetTarget();
         //if there is a target, and mushroom can be hit (not invencible)
-        if (target != null && enemyHealthSystem.isHittable())
+        if (target != null && enemyHealthSystem.IsHittable())
         {
             Vector2 dist = target.position - transform.position;
             var atRange = dist.magnitude <= attackRange;

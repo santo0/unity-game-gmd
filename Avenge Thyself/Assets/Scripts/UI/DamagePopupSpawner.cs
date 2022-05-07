@@ -5,7 +5,17 @@ using UnityEngine;
 public class DamagePopupSpawner : MonoBehaviour
 {
     ObjectPooler objectPooler;
-    // Start is called before the first frame update
+    public static DamagePopupSpawner instance;
+
+    private void Awake() {
+        if(instance == null){
+            instance = this;
+        }else{
+            Destroy(gameObject);
+        }
+//        DontDestroyOnLoad(gameObject);
+    }
+
     void Start()
     {
         objectPooler = ObjectPooler.Instance;

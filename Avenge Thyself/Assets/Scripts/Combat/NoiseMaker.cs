@@ -14,9 +14,10 @@ public class NoiseMaker : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy") &&
+            other.gameObject.tag != "Boss")
         {
-            Debug.Log("Ha entrat un enemic!");
+            //Debug.Log("Ha entrat un enemic!");
             other.gameObject
                  .GetComponent<NoiseReceiver>()
                  .TargetPlayer(gameObject.transform.parent);
@@ -26,9 +27,10 @@ public class NoiseMaker : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy") &&
+            other.gameObject.tag != "Boss")
         {
-            Debug.Log("Ha SORTIT un enemic!");
+            //Debug.Log("Ha SORTIT un enemic!");
             other.gameObject
                  .GetComponent<NoiseReceiver>()
                  .StopTarget();

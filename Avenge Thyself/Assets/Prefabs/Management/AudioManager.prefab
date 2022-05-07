@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5396290529379139246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5396290529379139152}
+  - component: {fileID: 5396290529379139247}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5396290529379139152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5396290529379139246}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 276.81845, y: 211.19475, z: 2.1731508}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5396290529379139247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5396290529379139246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a107c470260264da285c8201c0ee1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: MenuSong
+    clip: {fileID: 8300000, guid: 96f181348bf3eca4fade38278ca4480e, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+  - name: BonusSong
+    clip: {fileID: 8300000, guid: 99b553f34566c114e9f148431ce5c28c, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+  - name: BossSong
+    clip: {fileID: 8300000, guid: 55afc39ddb9fca34cb2a0215af14445e, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+  - name: SecondSong
+    clip: {fileID: 8300000, guid: 0cbfc89b665a91b488a854f8101f6d8a, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}
+  - name: FirstSong
+    clip: {fileID: 8300000, guid: 5bda21f4f36ccc04e8f23584b553cb37, type: 3}
+    volume: 1
+    pitch: 1
+    source: {fileID: 0}

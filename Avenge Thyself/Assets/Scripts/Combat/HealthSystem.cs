@@ -11,6 +11,8 @@ public abstract class HealthSystem : MonoBehaviour
     protected Animator animator;
 
     SpriteRenderer spriteRenderer;
+    DamagePopupSpawner damagePopupSpawner;
+
 
     protected bool hittable;
     public float PUSH_TIME = 0.5f;
@@ -33,11 +35,12 @@ public abstract class HealthSystem : MonoBehaviour
     {
         IEnumerator TakeDamage_Cor()
         {
-            Debug.LogWarning("Damaged!");
+            //Debug.LogWarning("Damaged!");
             hittable = false;
             hp -= damage;
             animator.SetTrigger("DamageTaken");
             spriteRenderer.material.SetInt("_Hit", 1);
+            
 
             if (hp <= 0.0f)
             {
@@ -48,7 +51,7 @@ public abstract class HealthSystem : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("Hitted!");
+                //Debug.LogWarning("Hitted!");
                 yield return new WaitForSeconds(PUSH_TIME);
                 spriteRenderer.material.SetInt("_Hit", 0);
             }

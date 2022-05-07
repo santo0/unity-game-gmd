@@ -12,6 +12,8 @@ public class MushroomAttackState : MonoBehaviour, State
     public MushroomIdleState IdleState;
     public MushroomChaseState ChaseState;
 
+    public SpriteRenderer attackAlert;
+
     public CircleCollider2D punch;
     public CircleCollider2D bite;
 
@@ -28,7 +30,9 @@ public class MushroomAttackState : MonoBehaviour, State
     {
         Debug.Log("ATTACK!");
         animator.SetTrigger("attack1");
+        attackAlert.enabled = true;
         yield return new WaitForSeconds(0.2f);
+        attackAlert.enabled = false;
         List<Collider2D> cols = new List<Collider2D>();
         cols.AddRange(Physics2D.OverlapCircleAll(punch.gameObject.transform.position, punch.radius));
         cols.AddRange(Physics2D.OverlapBoxAll(body.transform.position, body.size, LayerMask.NameToLayer("Player")));
@@ -47,7 +51,8 @@ public class MushroomAttackState : MonoBehaviour, State
                 {
                     Debug.Log("Hostion");
                     PlayerHealthSystem playerHS = col.gameObject.GetComponent<PlayerHealthSystem>();
-                    playerHS.TakeDamage(damage);
+                    var xDir = ((col.gameObject.transform.position - gameObject.transform.position).normalized).x;
+                    playerHS.TakeHit(damage, xDir); //TODO: Implement direction calculation!!
                 }
                 break;
             }
