@@ -67,3 +67,8 @@ MonoBehaviour:
     transition: {fileID: 0}
   StartInMenu: 1
   currentPlayer: {fileID: 0}
+  playerStats:
+    criticProbability: 0.2
+    healthPoints: 100
+    maxHealthPoints: 100
+    basicDamage: 10

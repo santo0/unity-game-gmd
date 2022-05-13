@@ -21,10 +21,8 @@ public class BossIdleState : MonoBehaviour, State
 
     public State RunState()
     {
-        Debug.Log("IdleState");
         if (isHostile)
         {
-            Debug.Log("IsHostile");
             //Do something
 
             var newState = ChaseState;
@@ -34,7 +32,6 @@ public class BossIdleState : MonoBehaviour, State
         }
         else
         {
-            Debug.Log("NotHostile");
             if (!waiting)
             {
                 StartCoroutine(Rest_Wait_Co());
@@ -49,9 +46,7 @@ public class BossIdleState : MonoBehaviour, State
     {
         waiting = true;
         isHostile = false;
-        Debug.Log("Start waiting...");
         yield return new WaitForSeconds(restTime);
-        Debug.Log("Finished waiting...");
 
         isHostile = true;
         waiting = false;

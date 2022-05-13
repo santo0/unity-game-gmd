@@ -5,10 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Attack
 {
-    public PlayerStats playerStats;
     public Animator animator;
     public string animationTrigger;
-
 
     public void StartCircleAttack(Vector2 attPoint, float radius, float xDir)
     {
@@ -25,12 +23,8 @@ public class Attack
 
     void HitEnemy(Collider2D enemy, float xDir)
     {
-//        Debug.Log(enemy);
         HealthSys enemyHealthSystem = enemy.GetComponent<HealthSys>();
-//        Debug.Log(enemyHealthSystem);
-        enemyHealthSystem.TakeHit(playerStats.GetTotalDamage(), xDir);
-        //        enemy.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDir * 500f, 500f));
-        //        damagePopupSpawner.SpawnDamagePopup(enemy.gameObject, dmg);
+        enemyHealthSystem.TakeHit(GameManager.instance.playerStats.GetTotalDamage(), xDir);
     }
 
 

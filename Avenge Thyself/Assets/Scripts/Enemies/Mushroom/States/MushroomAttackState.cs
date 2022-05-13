@@ -52,7 +52,7 @@ public class MushroomAttackState : MonoBehaviour, State
                     Debug.Log("Hostion");
                     PlayerHealthSystem playerHS = col.gameObject.GetComponent<PlayerHealthSystem>();
                     var xDir = ((col.gameObject.transform.position - gameObject.transform.position).normalized).x;
-                    playerHS.TakeHit(damage, xDir); //TODO: Implement direction calculation!!
+                    playerHS.TakeHit(damage, xDir);
                 }
                 break;
             }

@@ -18,6 +18,12 @@ public class BossChaseState : MonoBehaviour, State
 
     public bool chasing;
 
+    public float distanceProbability;
+
+    public Transform attacksTransform;
+
+    private bool spriteFlipped = false;
+
 
     private void Awake()
     {
@@ -48,51 +54,42 @@ public class BossChaseState : MonoBehaviour, State
 
     public State RunState()
     {
-        Debug.Log("ChaseState");
-        /*
-        if (!chasing)
-        {
-            Debug.Log("Not chasing");
-            Transform target = player.transform;
-
-            targetPosition = target.position;
-
-            MoveToDirection((targetPosition - transform.position).normalized.x);
-            Debug.Log("Started chasing");
-            chasing = true;
-        }*/
-
         Transform target = player.transform;
 
         targetPosition = target.position;
-        var distance = targetPosition - transform.position;
-        MoveToDirection(distance.normalized.x);
+        Vector2 dist = targetPosition - transform.position;
+        MoveToDirection(dist.normalized.x);
 
-        spriteRenderer.flipX = distance.x >= 0;
+        //        spriteRenderer.flipX = dist.x >= 0;
+
+        if (spriteFlipped != (dist.normalized.x < 0))
+        {
+            spriteRenderer.flipX = !spriteRenderer.flipX;
+            attacksTransform.localScale = new Vector3(-attacksTransform.localScale.x,
+                                                      attacksTransform.localScale.y,
+                                                      attacksTransform.localScale.z);
+            spriteFlipped = !spriteFlipped;
+        }
 
         animator.SetFloat("velX", Mathf.Abs(body.velocity.x));
-        
         if (CheckIfReachedTargetPosition())
         {
-            Debug.LogWarning("Target reached");
             body.velocity = body.velocity * Vector2.up;
             animator.SetFloat("velX", Mathf.Abs(body.velocity.x));
             chasing = false;
-            int n = Random.Range(0, 2);
-            if (n == 0)
-            {
-                Debug.Log("MeleeAttack");
-                return MeleeAttackState;
-            }
-            else
-            {
-                Debug.Log("DistanceAttack");
-                return DistanceAttackState;
-            }
+            return MeleeAttackState;
+        }
+        float n = Random.Range(0f, 1f);
+        if (n <= distanceProbability)
+        {
+            Debug.Log(n);
+            body.velocity = body.velocity * Vector2.up;
+            animator.SetFloat("velX", Mathf.Abs(body.velocity.x));
+            chasing = false;
+            return DistanceAttackState;
         }
         else
         {
-            Debug.Log("Continue chasing");
             return this;
         }
     }

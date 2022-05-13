@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CreateAssetMenu(fileName = "Player Stats", menuName = "PlayerStats")]
-public class PlayerStats : ScriptableSingleton<PlayerStats>
+[System.Serializable]
+public class PlayerStats
 {
-    public float criticProbability;
-    public float healthPoints;
-    public float maxHealthPoints;
-    public float basicDamage;
 
-    public float stamina;
-
+    public float criticProbability = 0.2f;
+    public float healthPoints = 100;
+    public float maxHealthPoints = 100;
+    public float basicDamage = 10;
 
     public float GetTotalDamage()
     {
         float dmg = basicDamage;
-        float n = Random.Range(0f, 1f); //TODO: ARREGLAR AIXO! SEMPRE FA CRITICS
+        float n = Random.Range(0f, 1f);
         if (n <= criticProbability)
         {
             dmg *= 2;

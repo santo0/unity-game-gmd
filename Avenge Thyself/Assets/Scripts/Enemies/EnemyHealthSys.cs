@@ -11,7 +11,7 @@ public class EnemyHealthSys : MonoBehaviour, HealthSys
     protected float hp;
     protected Animator animator;
 
-    SpriteRenderer spriteRenderer;
+    protected SpriteRenderer spriteRenderer;
     protected bool hittable;
     public float PUSH_TIME = 0.5f;
     public float DEAD_TIME = 2f;
@@ -49,7 +49,7 @@ public class EnemyHealthSys : MonoBehaviour, HealthSys
     }
 
 
-    IEnumerator TakeDamage_Cor(float damage, float xDir)
+    protected virtual IEnumerator TakeDamage_Cor(float damage, float xDir)
     {
         Debug.LogWarning("Damaged!");
         hittable = false;

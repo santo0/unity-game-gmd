@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
 
     private PlayerOneWayPlatformController oneWayPlatformController;
 
+    PlayerHealthSystem playerHealthSystem;
+    PlayerCombat playerCombat;
+
     public Animator animator;
     private Vector2 dir;
     public float movSpeed = 400f;
@@ -34,9 +37,22 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         oneWayPlatformController = GetComponent<PlayerOneWayPlatformController>();
+        playerHealthSystem = GetComponent<PlayerHealthSystem>();
+        playerCombat = GetComponent<PlayerCombat>();
     }
     private void OnMove(InputValue value)
     {
+        if (playerHealthSystem.deadPlayer)
+        {
+            dir = Vector2.zero;
+            return;
+        }
+        if (playerCombat.IsBlocking())
+        {
+            dir = Vector2.zero;
+            return;
+        }
+
         dir = value.Get<Vector2>();
         if (dir.x < 0)
         {
@@ -50,6 +66,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump(InputValue value)
     {
+        if (playerHealthSystem.deadPlayer)
+        {
+            jumpPressed = false;
+            return;
+        }
+        if (playerCombat.IsBlocking())
+        {
+            jumpPressed = false;
+            return;
+        }
+
         float val = value.Get<float>();
         if (val == 1f)
         {

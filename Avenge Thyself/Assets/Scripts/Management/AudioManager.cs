@@ -9,6 +9,9 @@ public class AudioManager : MonoBehaviour
 
     public Sound[] sounds;
 
+    [SerializeField]
+    private float generalVolume = 1;
+
     private Sound currentSong = null;
 
     private void Awake()
@@ -28,7 +31,7 @@ public class AudioManager : MonoBehaviour
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
-            s.source.volume = s.volume;
+            s.source.volume = s.volume * generalVolume;
             s.source.pitch = s.pitch;
         }
     }
@@ -69,5 +72,14 @@ public class AudioManager : MonoBehaviour
     public void Resume()
     {
         currentSong.source.Play();
+    }
+
+    public void ChangeGeneralVolume(float volume)
+    {
+        generalVolume = volume;
+        foreach (Sound s in sounds)
+        {
+            s.source.volume = s.volume * generalVolume;
+        }
     }
 }

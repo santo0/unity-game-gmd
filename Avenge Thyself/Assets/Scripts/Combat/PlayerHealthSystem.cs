@@ -16,22 +16,34 @@ public class PlayerHealthSystem : MonoBehaviour, HealthSys
     public float DEAD_TIME = 2f;
     public PlayerStats playerStats;
 
+    public Healthbar healthbar;
+
+    public bool deadPlayer;
+
 
     private void Awake()
     {
         hittable = true;
+        deadPlayer = false;
+    }
 
+    private void Start()
+    {
+        playerStats = GameManager.instance.playerStats;
+        healthbar.SetMaxHealth(playerStats.maxHealthPoints);
+        healthbar.SetHealth(playerStats.healthPoints);
     }
 
     public void Death()
     {
         animator.SetTrigger("Death");
+        deadPlayer = true;
     }
 
     public void Restart()
     {
         animator.SetTrigger("Alive");
-        spawnPoint.SpawnPlayer(this.gameObject); //TODO: Set spawn
+        spawnPoint.SpawnPlayer(this.gameObject);
     }
 
     public void TakeHit(float damage, float xDir)
@@ -47,6 +59,7 @@ public class PlayerHealthSystem : MonoBehaviour, HealthSys
         //Debug.LogWarning("antes "+ playerStats.healthPoints);
         hittable = false;
         playerStats.healthPoints -= damage;
+        healthbar.SetHealth(playerStats.healthPoints);
         //Debug.LogWarning("despues "+ playerStats.healthPoints);
         DamagePopupSpawner.instance.SpawnDamagePopup(gameObject, damage);
         animator.SetTrigger("DamageTaken");
@@ -78,8 +91,9 @@ public class PlayerHealthSystem : MonoBehaviour, HealthSys
     {
         playerStats.healthPoints = playerStats.maxHealthPoints;
         hittable = true;
-        //Contador de vides o mort?
-        GameManager.instance.BadGameOver();
+        healthbar.SetMaxHealth(playerStats.maxHealthPoints);
+        deadPlayer = false;
+
     }
     public float GetHP()
     {

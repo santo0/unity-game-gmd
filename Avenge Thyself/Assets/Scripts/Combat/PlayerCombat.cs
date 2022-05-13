@@ -14,6 +14,8 @@ public class PlayerCombat : MonoBehaviour
     AttackStateMachine attackStateMachine;
     bool isBlocking;
 
+    PlayerHealthSystem playerHealthSystem;
+
 
     float timeLastAtt;
 
@@ -22,15 +24,17 @@ public class PlayerCombat : MonoBehaviour
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         animator = gameObject.GetComponent<Animator>();
         attackStateMachine = GetComponent<AttackStateMachine>();
+        playerHealthSystem = GetComponent<PlayerHealthSystem>();
         isBlocking = false;
     }
 
     void OnBasicAttack()
     {
-        float xDir = 0;
-        //x,y
-        //        Vector2 mousePos = Camera.main.ScreenToViewportPoint(Mouse.current.position.ReadValue());
+        if (playerHealthSystem.deadPlayer) return;
+        if (isBlocking) return;
+
         Vector2 attPoint;
+        float xDir = 0;
 
         if (spriteRenderer.flipX)
         {//Player looking at left
@@ -48,6 +52,7 @@ public class PlayerCombat : MonoBehaviour
 
     void OnBlock(InputValue value)
     {
+        if (playerHealthSystem.deadPlayer) return;
         bool block = (value.Get<float>() == 1f);
         animator.SetBool("isBlocking", block);
         isBlocking = block;

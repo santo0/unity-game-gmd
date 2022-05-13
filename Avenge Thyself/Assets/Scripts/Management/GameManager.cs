@@ -14,13 +14,14 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject currentPlayer;
-
+    public PlayerStats playerStats = null;
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            playerStats = new PlayerStats();
         }
         else
         {
@@ -73,14 +74,14 @@ public class GameManager : MonoBehaviour
         {
             AudioManager.instance.Stop();
         }
+
+        if (li.levelName == "Menu")
+        {
+            playerStats = new PlayerStats();
+        }
+        currentPlayer = GameObject.Find("Player");
     }
 
-    public void BadGameOver()
-    {
-        //You died text, return to menu
-        //Disable controls, show text, return to menu
-        Debug.LogWarning("YOU DIED!!!!!");
-    }
 
     public void GoodGameOver()
     {
@@ -88,28 +89,4 @@ public class GameManager : MonoBehaviour
         Debug.LogWarning("YOU WON!!!!!");
         LoadLevel("Credits");
     }
-
-
-
-    public void AssignPlayer(GameObject player)
-    {
-        Debug.LogWarning(player);
-        currentPlayer = player;
-    }
-
-    public void UnassignPlayer()
-    {
-        Debug.LogWarning(null);
-        currentPlayer = null;
-    }
-
-    public GameObject GetCurrentPlayer()
-    {
-        if (currentPlayer == null)
-        {
-            currentPlayer = GetComponentInParent<PlayerAssigner>().gameObject;
-        }
-        return currentPlayer;
-    }
-
 }
