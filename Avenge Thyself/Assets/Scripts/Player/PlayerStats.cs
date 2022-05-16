@@ -12,6 +12,7 @@ public class PlayerStats
     public float maxHealthPoints = 100;
     public float basicDamage = 10;
 
+    //Always call this function for damage crit. effect
     public float GetTotalDamage()
     {
         float dmg = basicDamage;

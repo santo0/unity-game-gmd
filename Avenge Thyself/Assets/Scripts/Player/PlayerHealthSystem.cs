@@ -50,17 +50,16 @@ public class PlayerHealthSystem : MonoBehaviour, HealthSys
     {
         if (hittable)
         {
-            StartCoroutine(TakeDamage_Cor(damage, xDir));
+            StartCoroutine(Cor_TakeDamage(damage, xDir));
         }
     }
 
-    IEnumerator TakeDamage_Cor(float damage, float xDir)
+    IEnumerator Cor_TakeDamage(float damage, float xDir)
     {
-        //Debug.LogWarning("antes "+ playerStats.healthPoints);
         hittable = false;
         playerStats.healthPoints -= damage;
         healthbar.SetHealth(playerStats.healthPoints);
-        //Debug.LogWarning("despues "+ playerStats.healthPoints);
+
         DamagePopupSpawner.instance.SpawnDamagePopup(gameObject, damage);
         animator.SetTrigger("DamageTaken");
         spriteRenderer.material.SetInt("_Hit", 1);

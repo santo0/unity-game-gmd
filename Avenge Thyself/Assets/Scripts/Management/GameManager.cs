@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        //Singleton pattern
         if (instance == null)
         {
             instance = this;
@@ -29,13 +30,11 @@ public class GameManager : MonoBehaviour
             return;
         }
         DontDestroyOnLoad(gameObject);
-
-
     }
 
     private void Start()
     {
-        //Load menu
+        //Debug option for loading menu or stay with current scene
         if (StartInMenu)
         {
             LoadLevel("Menu");
@@ -43,6 +42,7 @@ public class GameManager : MonoBehaviour
 
         LevelInformation currentLevelInfo = Array.Find(levels,
                     level => level.levelName == SceneManager.GetActiveScene().name);
+        
         AudioManager.instance.Play(currentLevelInfo.songName, true);
 
         currentPlayer = GameObject.Find("Player");
@@ -59,12 +59,14 @@ public class GameManager : MonoBehaviour
 
     IEnumerator Cor_LoadLevel(LevelInformation li)
     {
+        //In case of transition, play it
         if (li.transition != null)
         {
             li.transition.animator.SetTrigger("Start");
             yield return new WaitForSeconds(li.transition.transitionTime);
             li.transition.animator.SetTrigger("End");
         }
+        //Load level with its music
         SceneManager.LoadScene(li.levelNum);
         if (li.songName != null && li.songName != "")
         {
@@ -75,6 +77,7 @@ public class GameManager : MonoBehaviour
             AudioManager.instance.Stop();
         }
 
+        //If loading level, restart player stats
         if (li.levelName == "Menu")
         {
             playerStats = new PlayerStats();
@@ -85,7 +88,7 @@ public class GameManager : MonoBehaviour
 
     public void GoodGameOver()
     {
-        //Rick-roll
+        //Rick-roll 8)
         Debug.LogWarning("YOU WON!!!!!");
         LoadLevel("Credits");
     }

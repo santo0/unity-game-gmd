@@ -38,8 +38,7 @@ public class ObjectPooler : MonoBehaviour
             poolDictionary.Add(pool.tag, objectPool);
         }
     }
-    //Problematic section
-    //End of section
+
     public GameObject SpawnFromPool(string tag, Vector3 position)
     {
         if (!poolDictionary.ContainsKey(tag))

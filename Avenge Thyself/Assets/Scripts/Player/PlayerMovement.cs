@@ -42,12 +42,8 @@ public class PlayerMovement : MonoBehaviour
     }
     private void OnMove(InputValue value)
     {
-        if (playerHealthSystem.deadPlayer)
-        {
-            dir = Vector2.zero;
-            return;
-        }
-        if (playerCombat.IsBlocking())
+
+        if (playerHealthSystem.deadPlayer || playerCombat.IsBlocking())
         {
             dir = Vector2.zero;
             return;
@@ -66,12 +62,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnJump(InputValue value)
     {
-        if (playerHealthSystem.deadPlayer)
-        {
-            jumpPressed = false;
-            return;
-        }
-        if (playerCombat.IsBlocking())
+        if (playerHealthSystem.deadPlayer || playerCombat.IsBlocking())
         {
             jumpPressed = false;
             return;
@@ -106,13 +97,14 @@ public class PlayerMovement : MonoBehaviour
         {
             horizontalWallJump();
         }
+        //player input move left or right
         else if (dir.x != 0)
         {
             horizontalWallJump();
         }
         else
         {
-            //Wall slide with friction
+            //Give friction effect if wallsliding and going down
             if (body.velocity.y < 0f)
             {
                 Vector2 wallForce = (-body.velocity) * body.mass * body.gravityScale * Vector2.up;
@@ -136,9 +128,11 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            //Stay in position
             animator.SetBool("isOnLedge", true);
             body.velocity = Vector2.zero;
             body.angularVelocity = 0f;
+            //physics don't apply / no gravity
             body.isKinematic = true;
             if (colDetect.isCollBotLeft())
             {
@@ -157,11 +151,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (body.velocity.x > -MAX_VEL && body.velocity.x < MAX_VEL)
         {
+            //physics apply
             body.isKinematic = false;
             body.AddForce(dir * movSpeed * Time.deltaTime);
         }
         if (jumpPressed)
         {
+            //physics apply
             body.isKinematic = false;
             body.AddForce(Vector2.up * jumpSpeed);
             jumpTimeCounter = jumpTime;
@@ -169,7 +165,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void horizontalWallJump()
     {
-        //resets Y-axis velocity (problems with the momentum)
+        //resets Y-axis velocity
         body.velocity = body.velocity + Vector2.down * body.velocity;
 
         //Vector2 jForce = new Vector2(300f, 700f);
@@ -200,10 +196,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void airInteraction()
     {
-        // solves bug with ledge
+        // physics apply
         body.isKinematic = false;
 
-        if (body.velocity.x > -MAX_VEL && body.velocity.x < MAX_VEL)
+        //speed cap
+        if (-MAX_VEL < body.velocity.x && body.velocity.x < MAX_VEL)
         {
             body.AddForce(dir * movSpeed * Time.deltaTime);
         }
@@ -226,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (oneWayPlatformController.currentOneWayPlatform != null)
         {
-            StartCoroutine(oneWayPlatformController.DisableCollision());
+            StartCoroutine(oneWayPlatformController.Cor_DisableCollision());
         }
     }
 

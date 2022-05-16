@@ -17,12 +17,13 @@ public class NextLevelDoor : MonoBehaviour
         Debug.Log("OnCollision");
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            StartCoroutine(Co_EnterDoor());
+            StartCoroutine(Cor_EnterDoor());
         }
     }
 
-    IEnumerator Co_EnterDoor()
+    IEnumerator Cor_EnterDoor()
     {
+        //Play door animation and load next level
         animator.SetTrigger("Open");
         yield return new WaitForSeconds(1f);
         GameManager.instance.LoadLevel(nextLevelName);

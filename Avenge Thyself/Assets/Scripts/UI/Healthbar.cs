@@ -24,7 +24,6 @@ public class Healthbar : MonoBehaviour
     {
         slider.value = health;
         currentHP.text = health.ToString();
-
     }
 
 }

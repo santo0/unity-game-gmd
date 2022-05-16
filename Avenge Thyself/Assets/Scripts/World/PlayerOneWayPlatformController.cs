@@ -28,11 +28,13 @@ public class PlayerOneWayPlatformController : MonoBehaviour
         }
     }
 
-    public IEnumerator DisableCollision()
+    public IEnumerator Cor_DisableCollision()
     {
+            //Disable collision for the current platform the player is on
             BoxCollider2D platformCollider = currentOneWayPlatform.GetComponent<BoxCollider2D>();
             Physics2D.IgnoreCollision(playerCollider, platformCollider);
             yield return new WaitForSeconds(1f);
+            //Return to original state after 1s
             Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
     }
 }
