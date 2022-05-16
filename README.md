@@ -26,6 +26,7 @@ Special:
 Tutorials:
 + [Audio in Unity](https://www.youtube.com/watch?v=6OT43pvUyfY)
 + [2D Smooth Camera Follow](https://www.youtube.com/watch?v=_QnPY6hw8pA)
++ [AI State Machine](https://www.youtube.com/watch?v=cnpJtheBLLY)
 
 Used assets:
 + [Hero Knight](https://assetstore.unity.com/packages/2d/characters/hero-knight-pixel-art-165188)
